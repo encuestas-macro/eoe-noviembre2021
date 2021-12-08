@@ -1,0 +1,190 @@
+---
+css: style_eoe.css
+pagetitle: "EOE noviembre 2021"
+output: html_document
+---
+
+```{r config, include=FALSE}
+library(dplyr)
+library(stringr)
+library(lubridate)
+library(dygraphs)
+library(kableExtra)
+library(formattable)
+
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo = FALSE)
+
+# Cambiar esta ruta depediendo el mes del informe -- -- -- --- 
+load(here::here("eoe", "outputs", "2021", "11. noviembre", "ws_noviembre_2021"))
+sparkline::sparkline(0)
+```
+
+<!-- Header del documento -->
+
+::: {.header}
+::: {.imagen}
+<img src="img/bcrd_squared.png" alt="drawing"/>
+:::
+
+::: {.title}
+<h2> Banco Central de la República Dominicana <br> Encuesta de Opinión Empresarial</h2>
+
+Noviembre 2021
+:::
+:::
+
+<hr class="head-ruler">
+
+<!-- ---------------------------------------------------------------------------------------------- -->
+
+### Mejora de la situación económica del sector industrial
+
+------------------------------------------------------------------------
+
+::: {.first-container}
+::: {.left}
+
+El indicador sobre la situación económica del sector mostró una leve recuperación en noviembre respecto a la desaceleración que presentó el mes anterior. El saldo se ubica en 42.3, con una considerable proporción de empresas indicando que su situación económica mejoró (46.2%), mientras que el 50.0% afirma que se mantuvo igual.
+
+Por otro lado, el indicador sobre el nivel de inventario mostró una desaceleración respecto al aumento que presentó en octubre y se coloca en 4.4, con una variación negativa de 6.8 respecto al mes anterior, lo que advierte una desacumulación de existencias. 
+
+
+
+:::
+
+::: {.right}
+#### Situación económica del mes actual
+
+```{r, fig.height=3, fig.width=5}
+eoe_dygraph_line_chart(c('sit_econ'), legend_w = 400) |> 
+  dygraphs::dyLimit(limit = 0, color = 'gray')
+```
+:::
+:::
+
+<!-- ---------------------------------------------------------------------------------------------- -->
+
+### Aumento en la producción y los pedidos
+
+------------------------------------------------------------------------
+
+::: {.second-container}
+::: {.left}
+
+Los principales indicadores del sector manufacturero continúan mostrando una evolución positiva, registrando los pedidos el aumento más notable respecto al mes anterior, al pasar de  3.3 en octubre a 30.8 en este sondeo. Del mismo modo, el indicador sobre el nivel de producción muestra un saldo favorable de 23.1, para un incremento de 6.4 este mes.
+
+En contraste con la evolución de los pedidos y la producción, el saldo sobre empleo presentó una reducción de 17.2 puntos al compararlo con el mes anterior, para un balance de -3.9.
+
+:::
+
+::: {.right}
+
+####  Producción y pedidos respecto al mes anterior
+#####  (Promedio móvil 3 meses)
+
+```{r, fig.height=3, fig.width=5}
+eoe_dygraph_line_chart(c('produccion', 'pedidos'), moving_average = 3, 
+                       legend_w = 400, plot_colors = colores$green) |> 
+  dygraphs::dyLimit(limit = 0, color = 'gray')
+```
+
+:::
+:::
+
+<!-- ----------------------------------------------------------------------------- -->
+
+### Sector manufacturero se mantiene con expectativas favorables
+
+------------------------------------------------------------------------
+
+::: {.third-container}
+::: {.left .first}
+
+En  noviembre las expectativas para las distintas variables se mantienen favorables, aunque con niveles inferiores a los registrados el mes anterior. De este modo, el saldo que resume las expectativas sobre la situación económica de los próximos seis meses se coloca en 42.3, para una variación negativa de 17.7, en un contexto en el que el 84.6% de las empresas considera que su situación económica mejorará o se mantendrá igual.
+
+:::
+
+::: {.right .first}
+
+#### Expectativas situación económica (próximos 6 meses)
+
+```{r, fig.height=3, fig.width=5}
+eoe_dygraph_line_chart(c('sit_econ_exp'), legend_w = 400, 
+                       plot_colors = colores$green) |> 
+  dygraphs::dyLimit(limit = 0, color = 'gray')
+```
+
+:::
+
+::: {.left .secondl}
+
+Las expectativas de producción, así como las del nivel de precios en los próximos tres meses, también registraron una disminución respecto al mes anterior, con saldos de 26.9 y 30.8, y variaciones mensuales de -19.7 y -9.2, respectivamente. 
+
+La excepción son las expectativas de empleo que mostraron una evolución positiva con respecto al mes anterior, el indicador muestra un saldo de 15.4, para una variación de 5.4 puntos en comparación con octubre de 2021 (10.0).
+
+
+:::
+
+::: {.right .second}
+
+#### Expectativas de producción y empleo
+
+```{r, , fig.height=3, fig.width=5}
+eoe_dygraph_line_chart(c('produccion_exp', 'empleo_exp'), legend_w = 400, plot_colors = colores$green) |>
+  dygraphs::dyLimit(limit = 0, color = 'gray')
+```
+:::
+:::
+
+<!-- ---------------------------------------------------------------------------------------------- -->
+
+### Confianza industrial y clima empresarial
+
+------------------------------------------------------------------------
+
+::: {.fourth-container}
+::: {.left .first}
+
+El Índice de Confianza Industrial (ICI) resume la actividad actual y las expectativas de actividad futura de las empresas del sector manufacturero en base a variables observables de las empresas. Este indicador mostró una recuperación en noviembre, para un resultado de 58.9, explicado principalmente por la evolución reciente de los pedidos.
+
+:::
+
+::: {.right .first}
+
+#### Indicador de Confianza Industrial
+
+```{r, fig.height=3, fig.width=5}
+eoe_dygraph_bar_chart('ici', legend_w = 350, plot_colors = colores$green) 
+```
+
+:::
+
+::: {.left .secondl}
+
+Asimismo, la percepción que tienen los empresarios del sector acerca de la situación económica actual y futura de sus empresas se sintetiza a través del Indicador de Clima Empresarial (ICE). En este sondeo el indicador se coloca en un nivel inferior al del mes anterior, con un resultado de 42.3. 
+
+:::
+
+::: {.right .second}
+
+#### Indicador de Clima Empresarial
+
+```{r, fig.height=3, fig.width=5}
+eoe_dygraph_bar_chart('ice')
+```
+
+:::
+:::
+
+<!-- ---------------------------------------------------------------------------------------------- -->
+
+::: {.cuadro-resumen}
+
+### Cuadro resumen
+
+------------------------------------------------------------------------
+
+```{r}
+eoe_tabla_resumen(fullWidth = TRUE, fontSize = 16, comparation_lag = 1)
+```
+:::
